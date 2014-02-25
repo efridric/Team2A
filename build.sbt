@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 name := "Team2A"
 
 version := "1.0-SNAPSHOT"
@@ -12,16 +11,3 @@ libraryDependencies ++= Seq(
 )     
 
 play.Project.playJavaSettings
-=======
-name := "Team2A"
-
-version := "1.0-SNAPSHOT"
-
-libraryDependencies ++= Seq(
-  javaJdbc,
-  javaEbean,
-  cache
-)     
-
-play.Project.playJavaSettings
->>>>>>> master_test
