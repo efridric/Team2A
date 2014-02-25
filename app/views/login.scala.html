@@ -1,0 +1,44 @@
+@(form: Form[Application.Login], form2: Form[Application.SignUp])
+<html>
+	<head>
+		<title>Login</title>
+		<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+		<link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/login.css")">
+		<script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
+	</head>
+	<body>
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header"><a href="#" class="navbar-brand">Team 2A</a></div>
+				<div class="navbar-header pull-right">
+					@helper.form(routes.Application.authenticate, 'class -> "navbar-form navbar-right", 'role -> "form") {
+					   <div class="form-group">
+					       <input class="form-control" type="email" name="email" placeholder="Email" value="@form("email").value">
+					   </div>
+					   <div class="form-group">
+					       <input class="form-control" type="password" name="password" placeholder="Password">
+					   </div>
+					       <button class="btn btn-success" type="submit">Sign In</button>
+					}
+					@if(form.hasGlobalErrors){
+						<div class="alert alert-danger">
+							@form.globalError.message
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+		<div class="jumbotron">
+			<div class="container">
+				<div class="row pull-right">
+					<div class="col-md-6">
+						@helper.form(routes.Application.login, 'role -> "form"){
+							
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

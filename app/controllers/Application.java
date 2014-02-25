@@ -38,8 +38,8 @@ public class Application extends Controller {
     public static Result login() {
         return ok(
         	login.render(
-        	    Form.form(Login.class),
-        	    Form.form(SignUp.class)
+        	    form(Login.class),
+        	    form(SignUp.class)
         	)
         );
     }
@@ -47,7 +47,7 @@ public class Application extends Controller {
     public static Result authenticate() {
     	Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
     	if(loginForm.hasErrors()){
-    		return badRequest(login.render(loginForm));
+    		return badRequest(login.render(loginForm, form(SignUp.class)));
     	}
     	else{
     		session().clear();
@@ -59,7 +59,7 @@ public class Application extends Controller {
     public static Result signUp(){
         Form<SignUp> signUpForm = Form.form(SignUp.class).bindFromRequest();
         if(signUpForm.hasErrors()){
-            return badRequest(login.render(signUpForm));
+            return badRequest(login.render(form(Login.class), signUpForm));
         }
         else{
             session().clear();
