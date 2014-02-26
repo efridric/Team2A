@@ -63,7 +63,7 @@ public class Application extends Controller {
 	    		session().clear();
 	    		session("email", signInForm.get().email);
 	    	}
-	    	return ok();
+	    	return redirect(routes.Tasks.home());
     	}
     	else{
     		Form<SignUp> signUpForm = Form.form(SignUp.class).bindFromRequest();
