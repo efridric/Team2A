@@ -1,4 +1,4 @@
-@(form: Form[Application.Login], form2: Form[Application.SignUp])
+@(signIn: Form[Application.SignIn], signUp: Form[Application.SignUp])
 <html>
 	<head>
 		<title>Login</title>
@@ -12,18 +12,18 @@
 			<div class="container">
 				<div class="navbar-header"><a href="#" class="navbar-brand">Team 2A</a></div>
 				<div class="navbar-header pull-right">
-					@helper.form(routes.Application.authenticate, 'class -> "navbar-form navbar-right", 'role -> "form") {
+					@helper.form(routes.Application.signInOrSignUp, 'class -> "navbar-form navbar-right", 'role -> "form") {
 					   <div class="form-group">
-					       <input class="form-control" type="email" name="email" placeholder="Email" value="@form("email").value">
+					       <input class="form-control" type="email" name="email" placeholder="Email" value="@signIn("email").value">
 					   </div>
 					   <div class="form-group">
 					       <input class="form-control" type="password" name="password" placeholder="Password">
 					   </div>
-					       <button class="btn btn-success" type="submit">Sign In</button>
+					       <button class="btn btn-success" type="submit" name="action" value="signIn">Sign In</button>
 					}
-					@if(form.hasGlobalErrors){
+					@if(signIn.hasGlobalErrors){
 						<div class="alert alert-danger">
-							@form.globalError.message
+							@signIn.globalError.message
 						</div>
 					}
 				</div>
@@ -33,8 +33,28 @@
 			<div class="container">
 				<div class="row pull-right">
 					<div class="col-md-6">
-						@helper.form(routes.Application.login, 'role -> "form"){
-							
+						@helper.form(routes.Application.signInOrSignUp, 'role -> "form"){
+						   <div class="form-group">
+						       <input class="form-control" type="text" name="firstName" placeholder="First Name">
+						   </div>
+						   <div class="form-group">
+						       <input class="form-control" type="text" name="lastName" placeholder="Last Name">
+						   </div>
+							<div class="form-group">
+						       <input class="form-control" type="email" name="email" placeholder="Email" value="@signUp("email").value">
+						   </div>
+						   <div class="form-group">
+						       <input class="form-control" type="password" name="password" placeholder="Password">
+						   </div>
+						   <div class="form-group">
+						       <input class="form-control" type="password" name="passwordVerify" placeholder="Password">
+						   </div>
+						       <button class="btn btn-warning" type="submit" name="action" value="signUp">Sign Up</button>
+						}
+						@if(signUp.hasGlobalErrors){
+							<div class="alert alert-danger">
+								@signUp.globalError.message
+							</div>
 						}
 					</div>
 				</div>

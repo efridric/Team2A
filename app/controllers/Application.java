@@ -33,6 +33,14 @@ public class Application extends Controller {
 	    public String firstName;
 	    public String lastName;
 	    public String password;
+	    public String passwordVerify;
+	    
+	    public String validate(){
+	    	if(!password.equals(passwordVerify)){
+	    		return "Passwords do not match";
+	    	}
+	    	return null;
+	    }
 	}
 	
     public static Result home() {
@@ -45,7 +53,8 @@ public class Application extends Controller {
     }
           
     public static Result signInOrSignUp() {
-    	if(request().body().asFormUrlEncoded().get("action").equals("signIn")){
+    	System.out.println(request().body().asFormUrlEncoded().get("action").toString());
+    	if((request().body().asFormUrlEncoded().get("action"))[0].equals("signIn")){
 	    	Form<SignIn> signInForm = Form.form(SignIn.class).bindFromRequest();
 	    	if(signInForm.hasErrors()){
 	    		return badRequest(home.render(signInForm, form(SignUp.class)));
