@@ -31,34 +31,55 @@
 		</div>
 		<div class="jumbotron">
 			<div class="container">
-				<div class="row pull-right">
-					<div class="col-md-6">
-						@helper.form(routes.Application.signInOrSignUp, 'role -> "form"){
-						   <div class="form-group">
-						       <input class="form-control" type="text" name="firstName" placeholder="First Name">
-						   </div>
-						   <div class="form-group">
-						       <input class="form-control" type="text" name="lastName" placeholder="Last Name">
-						   </div>
-							<div class="form-group">
-						       <input class="form-control" type="email" name="email" placeholder="Email" value="@signUp("email").value">
-						   </div>
-						   <div class="form-group">
-						       <input class="form-control" type="password" name="password" placeholder="Password">
-						   </div>
-						   <div class="form-group">
-						       <input class="form-control" type="password" name="passwordVerify" placeholder="Confirm Password">
-						   </div>
-						       <button class="btn btn-warning" type="submit" name="action" value="signUp">Sign Up</button>
-						}
-						@if(signUp.hasGlobalErrors){
-							<div class="alert alert-danger">
-								@signUp.globalError.message
-							</div>
-						}
+				<div class="row">
+					<div class="col-xs-7">
+						<h1>Welcome to Team2A</h1>
+						<p>Information about team 2a Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+							Information about team 2a
+						<p>
+					</div>
+					<div class="col-xs-3 col-xs-offset-1">
+							<h1>Sign Up:</h1>
+							@helper.form(routes.Application.signInOrSignUp, 'role -> "form"){
+							   <div class="form-group">
+							       <input class="form-control" type="text" name="firstName" placeholder="First Name">
+							   </div>
+							   <div class="form-group">
+							       <input class="form-control" type="text" name="lastName" placeholder="Last Name">
+							   </div>
+								<div class="form-group">
+							       <input class="form-control" type="email" name="email" placeholder="Email" value="@signUp("email").value">
+							   </div>
+							   <div class="form-group">
+							       <input class="form-control" type="password" name="password" placeholder="Password">
+							   </div>
+							   <div class="form-group">
+							       <input class="form-control" type="password" name="passwordVerify" placeholder="Confirm Password">
+							   </div>
+							       <button class="btn btn-warning" type="submit" name="action" value="signUp">Sign Up</button>
+							}
+							@if(signUp.hasGlobalErrors){
+								<div class="alert alert-danger">
+									@signUp.globalError.message
+								</div>
+							}
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="container">
+			<footer>&#169; Team2A 2014</footer>
 		</div>
 	</body>
 </html>
