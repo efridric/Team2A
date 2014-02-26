@@ -81,7 +81,7 @@ public class Application extends Controller {
     			session().clear();
                 session("email", signUpForm.get().email);
     		}
-    		return ok();
+    		return redirect(routes.Tasks.home());
     	}
     }
 }
