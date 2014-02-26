@@ -28,5 +28,9 @@ public class User extends Model {
 		return find.where().eq("email", email)
 				.eq("password", password).findUnique();
 	}
+	
+	public void save(){
+		Ebean.save(this);
+	}
 }
 

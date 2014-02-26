@@ -71,6 +71,13 @@ public class Application extends Controller {
     			return badRequest(home.render(form(SignIn.class), signUpForm));
     		}
     		else{
+    			User user = new User(
+    							signUpForm.get().email,
+    							signUpForm.get().firstName,
+    							signUpForm.get().lastName,
+    							signUpForm.get().password    							
+    						);
+    			user.save();
     			session().clear();
                 session("email", signUpForm.get().email);
     		}
