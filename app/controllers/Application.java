@@ -84,4 +84,14 @@ public class Application extends Controller {
     		return redirect(routes.Tasks.home());
     	}
     }
+    
+    public static Result signOut() {
+    	session().clear();
+    	return ok(
+            	home.render(
+            	    form(SignIn.class),
+            	    form(SignUp.class)
+            	)
+            );
+    }
 }
