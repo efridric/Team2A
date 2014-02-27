@@ -43,9 +43,9 @@ public class Application extends Controller {
 	    }
 	}
 	
-    public static Result home() {
+    public static Result index() {
 		return ok(
-        	home.render(
+        	index.render(
         	    form(SignIn.class),
         	    form(SignUp.class)
         	)
@@ -57,18 +57,18 @@ public class Application extends Controller {
     	if((request().body().asFormUrlEncoded().get("action"))[0].equals("signIn")){
 	    	Form<SignIn> signInForm = Form.form(SignIn.class).bindFromRequest();
 	    	if(signInForm.hasErrors()){
-	    		return badRequest(home.render(signInForm, form(SignUp.class)));
+	    		return badRequest(index.render(signInForm, form(SignUp.class)));
 	    	}
 	    	else{
 	    		session().clear();
 	    		session("email", signInForm.get().email);
 	    	}
-	    	return redirect(routes.Tasks.home());
+	    	return redirect(routes.Dashboard.home());
     	}
     	else{
     		Form<SignUp> signUpForm = Form.form(SignUp.class).bindFromRequest();
     		if(signUpForm.hasErrors()){
-    			return badRequest(home.render(form(SignIn.class), signUpForm));
+    			return badRequest(index.render(form(SignIn.class), signUpForm));
     		}
     		else{
     			User user = new User(
@@ -81,14 +81,14 @@ public class Application extends Controller {
     			session().clear();
                 session("email", signUpForm.get().email);
     		}
-    		return redirect(routes.Tasks.home());
+    		return redirect(routes.Dashboard.home());
     	}
     }
     
     public static Result signOut() {
     	session().clear();
     	return ok(
-            	home.render(
+            	index.render(
             	    form(SignIn.class),
             	    form(SignUp.class)
             	)

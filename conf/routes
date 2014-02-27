@@ -3,11 +3,11 @@
 # ~~~~
 
 # Login page
-GET     /                           controllers.Application.home()
+GET     /                           controllers.Application.index()
 POST	/							controllers.Application.signInOrSignUp()
 
 # After login
-GET     /afterLogin				    controllers.Tasks.home()
+GET     /dashboard			    	controllers.Dashboard.home()
 
 # Sign out
 GET		/signOut					controllers.Application.signOut()
