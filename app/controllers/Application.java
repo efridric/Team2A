@@ -104,21 +104,27 @@ public class Application extends Controller {
     }
     
     public static Result updateAccount(){
-    	Form<SignUp> editAccountForm = Form.form(SignUp.class).bindFromRequest();
-		if(editAccountForm.hasErrors()){
-			return badRequest(editAccount.render(
-									User.find.where().eq("email", session("email")).findUnique(),
-									editAccountForm
-							  ));
-		}
-		else{
-	    	String email = session("email");
-	    	User user = User.find.where().eq("email", email).findUnique();
-	    	user.email = editAccountForm.get().email;
-	        user.firstName = editAccountForm.get().firstName;
-	        user.lastName = editAccountForm.get().lastName;
-	    	user.save();
-	    	return redirect(routes.Dashboard.home());
-		}
+    	User user = User.find.where().eq("email", session("email")).findUnique();
+    	if((request().body().asFormUrlEncoded().get("action"))[0].equals("delete")){
+    		user.delete();
+    		session().clear();
+    		return redirect(routes.Application.index());
+    	}
+    	else{
+	    	Form<SignUp> editAccountForm = Form.form(SignUp.class).bindFromRequest();
+			if(editAccountForm.hasErrors()){
+				return badRequest(editAccount.render(
+										user,
+										editAccountForm
+								  ));
+			}
+			else{
+		    	user.email = editAccountForm.get().email;
+		        user.firstName = editAccountForm.get().firstName;
+		        user.lastName = editAccountForm.get().lastName;
+		    	user.save();
+		    	return redirect(routes.Dashboard.home());
+			}
+    	}
     }
 }
