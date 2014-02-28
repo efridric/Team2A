@@ -92,6 +92,19 @@ public class Application extends Controller {
             	    form(SignIn.class),
             	    form(SignUp.class)
             	)
-            );
+        );
+    }
+    
+    public static Result editAccount(){
+        String[] action = request().body().asFormUrlEncoded().get("action");
+        if(action != null && action[0].equals("save")){
+            
+        }
+        return ok(
+                editAccount.render(
+                   User.find.where().eq("email", session("email")).findUnique(), 
+                   form(SignUp.class)
+                )
+        );
     }
 }
