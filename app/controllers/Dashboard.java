@@ -7,10 +7,10 @@ import static play.data.Form.*;
 import play.mvc.*;
 import views.html.*;
 
-public class Tasks extends Controller {
+public class Dashboard extends Controller {
 	public static Result home(){
 		return ok(
-			afterLogin.render(
+			dashboard.render(
 					User.find.where().eq("email", session("email")).findUnique()
 			)
 		);
