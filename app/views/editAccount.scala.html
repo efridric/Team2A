@@ -1,4 +1,4 @@
-@(user: User)(editAccount: Form[Application.SignUp])
+@(user: User)(editAccountForm: Form[Application.SignUp])
 <html>
 	<head>
 		<title>Edit Account</title>
@@ -13,7 +13,7 @@
 			<div class="row">
 				<div class="col-xs-3 col-xs-offset-1">
 					<h1>Edit Account:</h1>
-					@helper.form(routes.Application.editAccount, 'role -> "form"){
+					@helper.form(routes.Application.updateAccount, 'role -> "form"){
 					   <div class="form-group">
 					       <input class="form-control" type="text" name="firstName" placeholder="First Name" value="@user.firstName">
 					   </div>
@@ -30,11 +30,11 @@
 					       <input class="form-control" type="hidden" name="passwordVerify" placeholder="Confirm Password" value="@user.password">
 					   </div>
 					       <button class="btn btn-success" type="submit" name="action" value="save">Save</button>
-					       <button class="btn btn-primary"  type="submit">Cancel</button>
+					       <a href="/dashboard" class="btn btn-primary" role="button">Cancel</a>
 					}
-					@if(editAccount.hasGlobalErrors){
+					@if(editAccountForm.hasGlobalErrors){
 						<div class="alert alert-danger">
-							@editAccount.globalError.message
+							@editAccountForm.globalError.message
 						</div>
 					}
 				</div>

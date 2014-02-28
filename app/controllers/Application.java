@@ -53,7 +53,6 @@ public class Application extends Controller {
     }
           
     public static Result signInOrSignUp() {
-    	System.out.println(request().body().asFormUrlEncoded().get("action").toString());
     	if((request().body().asFormUrlEncoded().get("action"))[0].equals("signIn")){
 	    	Form<SignIn> signInForm = Form.form(SignIn.class).bindFromRequest();
 	    	if(signInForm.hasErrors()){
@@ -96,15 +95,30 @@ public class Application extends Controller {
     }
     
     public static Result editAccount(){
-        String[] action = request().body().asFormUrlEncoded().get("action");
-        if(action != null && action[0].equals("save")){
-            
-        }
         return ok(
                 editAccount.render(
                    User.find.where().eq("email", session("email")).findUnique(), 
                    form(SignUp.class)
                 )
         );
+    }
+    
+    public static Result updateAccount(){
+    	Form<SignUp> editAccountForm = Form.form(SignUp.class).bindFromRequest();
+		if(editAccountForm.hasErrors()){
+			return badRequest(editAccount.render(
+									User.find.where().eq("email", session("email")).findUnique(),
+									editAccountForm
+							  ));
+		}
+		else{
+	    	String email = session("email");
+	    	User user = User.find.where().eq("email", email).findUnique();
+	    	user.email = editAccountForm.get().email;
+	        user.firstName = editAccountForm.get().firstName;
+	        user.lastName = editAccountForm.get().lastName;
+	    	user.save();
+	    	return redirect(routes.Dashboard.home());
+		}
     }
 }

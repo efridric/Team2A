@@ -9,6 +9,7 @@ POST	/							controllers.Application.signInOrSignUp()
 # After login
 GET     /dashboard			    	controllers.Dashboard.home()
 GET 	/editAccount				controllers.Application.editAccount()
+POST	/editAccount				controllers.Application.updateAccount()
 
 # Sign out
 GET		/signOut					controllers.Application.signOut()
