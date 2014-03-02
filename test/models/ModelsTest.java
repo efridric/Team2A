@@ -11,7 +11,8 @@ public class ModelsTest extends WithApplication {
 	public void setUp(){
 		start(fakeApplication(inMemoryDatabase()));
 	}
-	
+
+/******************************** User Model Tests **********************************/
 	@Test
 	public void createAndRetriveUser() {
 		new User("bob@test.com", "Bob", "Tester", "Testpass").save();
@@ -39,6 +40,7 @@ public class ModelsTest extends WithApplication {
 		assertEquals("update@test.com", test.email);
 	}
 	
+/******************************** Task Model Tests **********************************/
 	@Test
 	public void createTask(){
 		new User("test@test.com", "Mr.", "Tester", "test").save();
