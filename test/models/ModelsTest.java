@@ -38,4 +38,10 @@ public class ModelsTest extends WithApplication {
 		test.save();
 		assertEquals("update@test.com", test.email);
 	}
+	
+	@Test
+	public void createTask(){
+		new User("test@test.com", "Mr.", "Tester", "test").save();
+		Task task = new Task();
+	}
 }
