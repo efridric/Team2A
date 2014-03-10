@@ -119,10 +119,18 @@ public class Application extends Controller {
 								  ));
 			}
 			else{
-		    	user.email = editAccountForm.get().email;
 		        user.firstName = editAccountForm.get().firstName;
 		        user.lastName = editAccountForm.get().lastName;
 		    	user.save();
+		    	
+		    	//Check if email has been updated this saves un-needed database transactions if it hasn't
+		    	if(!(editAccountForm.get().email).equals(session("email"))){
+		    		user.email = editAccountForm.get().email;
+		    		user.save();
+		    		session().clear();
+		    		session("email", user.email);
+		    	}
+		    	
 		    	return redirect(routes.Dashboard.home());
 			}
     	}

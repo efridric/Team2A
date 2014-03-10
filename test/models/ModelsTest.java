@@ -34,8 +34,13 @@ public class ModelsTest extends WithApplication {
 		new User("test@test.com", "Mr.", "Tester", "test").save();
 		User test = User.find.where().eq("email", "test@test.com").findUnique();
 		assertNotNull(test);
+		test.firstName = "first";
+		test.lastName = "last";
+		test.save();
 		test.email = "update@test.com";
 		test.save();
 		assertEquals("update@test.com", test.email);
+		assertEquals("first", test.firstName);
+		assertEquals("last", test.lastName);
 	}
 }
