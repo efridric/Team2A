@@ -119,10 +119,13 @@ public class Application extends Controller {
 								  ));
 			}
 			else{
-		    	user.email = editAccountForm.get().email;
+				String email = editAccountForm.get().email;
+		    	user.email = email;
 		        user.firstName = editAccountForm.get().firstName;
 		        user.lastName = editAccountForm.get().lastName;
 		    	user.save();
+		    	session("email", email);
+		    	
 		    	return redirect(routes.Dashboard.home());
 			}
     	}

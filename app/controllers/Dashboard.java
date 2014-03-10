@@ -1,5 +1,8 @@
 package controllers;
 
+import java.util.List;
+
+import models.Task;
 import models.User;
 import play.*;
 import play.data.*;
@@ -9,9 +12,11 @@ import views.html.*;
 
 public class Dashboard extends Controller {
 	public static Result home(){
+		String email = session("email");
 		return ok(
 			dashboard.render(
-					User.find.where().eq("email", session("email")).findUnique()
+					User.find.where().eq("email", email).findUnique(),
+					Task.listTasks(email)
 			)
 		);
 	}

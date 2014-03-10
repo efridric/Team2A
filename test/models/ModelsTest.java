@@ -1,8 +1,15 @@
 package models;
 
+import java.util.List;
+
 import models.*;
+
 import org.junit.*;
+
+import com.avaje.ebean.Ebean;
+
 import static org.junit.Assert.*;
+import play.libs.Yaml;
 import play.test.WithApplication;
 import static play.test.Helpers.*;
 
@@ -10,6 +17,15 @@ public class ModelsTest extends WithApplication {
 	@Before
 	public void setUp(){
 		start(fakeApplication(inMemoryDatabase()));
+		Ebean.save((List) Yaml.load("test-data.yml"));
+	}
+
+/******************************** General Tests *************************************/
+	@Test
+	public void generalTest(){
+		//Count number of users
+		assertEquals(1, User.find.findRowCount());
+		assertEquals(1, Task.find.findRowCount());
 	}
 
 /******************************** User Model Tests **********************************/
@@ -32,8 +48,8 @@ public class ModelsTest extends WithApplication {
 	
 	@Test
 	public void createAndUpdate(){
-		new User("test@test.com", "Mr.", "Tester", "test").save();
-		User test = User.find.where().eq("email", "test@test.com").findUnique();
+		new User("tester@test.com", "Mr.", "Tester", "test").save();
+		User test = User.find.where().eq("email", "tester@test.com").findUnique();
 		assertNotNull(test);
 		test.email = "update@test.com";
 		test.save();
@@ -41,9 +57,10 @@ public class ModelsTest extends WithApplication {
 	}
 	
 /******************************** Task Model Tests **********************************/
+	
 	@Test
-	public void createTask(){
-		new User("test@test.com", "Mr.", "Tester", "test").save();
-		Task task = new Task();
+	public void listTasks(){
+		List<Task> testTasks = Task.listTasks("test@test.com");
+		assertEquals("test task 1", testTasks.get(0).title);
 	}
 }

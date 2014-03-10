@@ -1,4 +1,4 @@
-@(user: User)
+@(user: User, taskList: List[Task])
 <html>
 	<head>
 		<title>Dashboard</title>
@@ -9,6 +9,12 @@
 	</head>
 	<body>
 		@navbar(user)
+		
+		<ul>
+		@for(task <- taskList){
+			<li>@task.getTitle()</li>
+		}
+		</ul>
 	</body>
 </html>
 
