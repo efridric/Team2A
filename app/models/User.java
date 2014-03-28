@@ -8,6 +8,7 @@ import com.avaje.ebean.*;
 public class User extends Model {
 	
 	@Id //email is the id
+	public Long id;
 	public String email;
 	public String firstName;
 	public String lastName;
@@ -20,8 +21,8 @@ public class User extends Model {
 		this.password = password;
 	}
 	
-	public static Finder<String, User> find = new Finder<String,User>(
-			String.class, User.class
+	public static Finder<Long, User> find = new Finder<Long,User>(
+			Long.class, User.class
 	);
 	
 	public static User authenticate(String email, String password){

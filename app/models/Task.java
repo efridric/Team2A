@@ -26,14 +26,14 @@ public class Task extends Model {
 	
 	public static Finder<Long,Task> find = new Finder<Long, Task>(Long.class, Task.class);
 	
-	public static List<Task> listTasks(String email){
+	public static List<Task> listTasks(Long id){
 		return find.fetch("owner").where()
-				.eq("owner.email", email)
+				.eq("owner.id", id)
 				.findList();
 	}
 	
-	public static Task create(Task task, String email){
-		task.owner = User.find.ref(email);
+	public static Task create(Task task, Long id){
+		task.owner = User.find.ref(id);
 		task.save();
 		return task;
 	}

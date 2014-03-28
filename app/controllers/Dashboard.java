@@ -13,10 +13,11 @@ import views.html.*;
 public class Dashboard extends Controller {
 	public static Result home(){
 		String email = session("email");
+		User user = User.find.where().eq("email", email).findUnique();
 		return ok(
 			dashboard.render(
-					User.find.where().eq("email", email).findUnique(),
-					Task.listTasks(email)
+					user,
+					Task.listTasks(user.id)
 			)
 		);
 	}
