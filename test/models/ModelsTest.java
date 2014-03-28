@@ -17,33 +17,15 @@ public class ModelsTest extends WithApplication {
 	@Before
 	public void setUp(){
 		start(fakeApplication(inMemoryDatabase()));
-		Ebean.save((List) Yaml.load("test-data.yml"));
+		//Ebean.save((List) Yaml.load("test-data.yml"));
 	}
 
-/******************************** General Tests *************************************/
-	@Test
-	public void generalTest(){
-		//Count number of users
-		assertEquals(1, User.find.findRowCount());
-		assertEquals(1, Task.find.findRowCount());
-	}
 
 /******************************** User Model Tests **********************************/
-	@Test
-	public void createAndRetriveUser() {
-		new User("bob@test.com", "Bob", "Tester", "Testpass").save();
-		User bob = User.find.where().eq("email", "bob@test.com").findUnique();
-		assertNotNull(bob);
-		assertEquals("Bob", bob.firstName);
-	}
 	
 	@Test
-	public void tryAuthenticateUser() {
-		new User("bob@test.com", "Bob", "Tester", "Testpass").save();
-		assertNotNull(User.authenticate("bob@test.com", "Testpass"));
-		assertNull(User.authenticate("bob@test.com", "badpassword"));
-        assertNull(User.authenticate("tom@gmail.com", "Testpass"));
-		
+	public void findUser(){
+		assertNotNull(User.find.where().eq("email", "test@test.com").findUnique());
 	}
 	
 	@Test
@@ -63,9 +45,4 @@ public class ModelsTest extends WithApplication {
 	
 /******************************** Task Model Tests **********************************/
 	
-	@Test
-	public void listTasks(){
-		List<Task> testTasks = Task.listTasks("test@test.com");
-		assertEquals("test task 1", testTasks.get(0).title);
-	}
 }

@@ -7,7 +7,7 @@ import com.avaje.ebean.*;
 @Entity 
 public class User extends Model {
 	
-	@Id //email is the id
+	@Id
 	public Long id;
 	public String email;
 	public String firstName;
