@@ -125,7 +125,6 @@ public class Application extends Controller {
 		        user.lastName = editAccountForm.get().lastName;
 		    	user.save();
 		    	session("email", email);
-		    	
 		    	return redirect(routes.Dashboard.home());
 			}
     	}
