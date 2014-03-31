@@ -52,4 +52,14 @@ public class ModelsTest extends WithApplication {
 		assertEquals(tasks.get(0).title, "test task 1");
 		assertEquals(tasks.get(1).owner, u1);
 	}
+
+/******************************** Commitment Model Tests **********************************/
+
+	@Test
+	public void findCommitment(){
+		User u1 = User.find.where().eq("email", "test@test.com").findUnique();
+		List<Commitment> commitments = Commitment.listCommitments(u1.id);
+		assertEquals(commitments.get(0).title, "test");
+		assertEquals(commitments.get(0).owner, u1);
+	}
 }

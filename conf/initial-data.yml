@@ -17,4 +17,8 @@
   title: test task 2
   owner: *test
   
-  
+# Commitments
+
+- &c1 !!models.Commitment
+  title: test
+  owner: *test
