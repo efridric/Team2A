@@ -13,3 +13,8 @@
   title: test task 1
   owner: *test
   
+- &task2 !!models.Task
+  title: test task 2
+  owner: *test
+  
+  
