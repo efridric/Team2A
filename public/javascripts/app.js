@@ -3,7 +3,7 @@ jQuery(document).ready(function($) {
 	"use strict";
 
 	var options = {
-		events_source: 'assets/events.json.php',
+		events_source: 'assets/events.json',
 		view: 'month',
 		tmpl_path: 'assets/tmpls/',
 		tmpl_cache: false,
