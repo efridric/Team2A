@@ -43,8 +43,6 @@ create sequence user_seq;
 
 alter table commitment add constraint fk_commitment_owner_1 foreign key (owner_id) references user (id) on delete restrict on update restrict;
 create index ix_commitment_owner_1 on commitment (owner_id);
-alter table task add constraint fk_task_owner_2 foreign key (owner_id) references user (id) on delete restrict on update restrict;
-create index ix_task_owner_2 on task (owner_id);
 
 
 

@@ -8,6 +8,7 @@ POST	/							controllers.Application.signInOrSignUp()
 
 # After login
 GET     /dashboard			    	controllers.Dashboard.home()
+GET		/dashboard/getEvents		controllers.Dashboard.getEvents()
 GET 	/editAccount				controllers.Application.editAccount()
 POST	/editAccount				controllers.Application.updateAccount()
 

@@ -3,7 +3,7 @@ jQuery(document).ready(function($) {
 	"use strict";
 
 	var options = {
-		events_source: 'assets/events.json',
+		events_source: 'dashboard/getEvents',
 		view: 'month',
 		tmpl_path: 'assets/tmpls/',
 		tmpl_cache: false,
@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
 
 			$.each(events, function(key, val) {
 				$(document.createElement('li'))
-					.html('<a href="' + val.url + '">' + val.title + '</a>')
+					.html('<p>' + val.title + '</p>')
 					.appendTo(list);
 			});
 		},

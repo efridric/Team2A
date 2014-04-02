@@ -50,7 +50,7 @@ public class ModelsTest extends WithApplication {
 		User u1 = User.find.where().eq("email", "test@test.com").findUnique();
 		List<Task> tasks = Task.listTasks(u1.id);
 		assertEquals(tasks.get(0).title, "test task 1");
-		assertEquals(tasks.get(1).owner, u1);
+		assertEquals(tasks.get(1).ownerId, u1.id);
 	}
 
 /******************************** Commitment Model Tests **********************************/

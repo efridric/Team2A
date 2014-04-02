@@ -19,7 +19,7 @@ public class Task extends Model {
 	public boolean isComplete = false;
 	public Date dueDate;
 	@ManyToOne
-	public User owner;
+	public Long ownerId;
 	public String source;
 	public Time effort;
 	public int prority;
@@ -27,13 +27,13 @@ public class Task extends Model {
 	public static Finder<Long,Task> find = new Finder<Long, Task>(Long.class, Task.class);
 	
 	public static List<Task> listTasks(Long id){
-		return find.fetch("owner").where()
-				.eq("owner.id", id)
+		return find.where()
+				.eq("ownerId", id)
 				.findList();
 	}
 	
 	public static Task create(Task task, Long id){
-		task.owner = User.find.ref(id);
+		task.ownerId = User.find.ref(id).id;
 		task.save();
 		return task;
 	}

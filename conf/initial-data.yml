@@ -11,11 +11,11 @@
 
 - &task1 !!models.Task
   title: test task 1
-  owner: *test
+  ownerId: 1
   
 - &task2 !!models.Task
   title: test task 2
-  owner: *test
+  ownerId: 1
   
 # Commitments
 
