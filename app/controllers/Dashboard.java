@@ -37,4 +37,10 @@ public class Dashboard extends Controller {
 		result.put("result", Json.toJson(tasks));
 		return ok(result);
 	}
+	
+    public getMoodleTasks(){
+    	URL url = "https://moodle2.uncc.edu/calendar/export_execute.php?userid=25082&authtoken=771b8877ddd978a54fabf8a919323d6a03345e2b&preset_what=all&preset_time=weeknow";
+    	File file = new File(url.toURI());
+    	
+    }
 }
