@@ -1,13 +1,22 @@
 package controllers;
 
+import helpers.MoodleScraper;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
@@ -32,7 +41,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
 public class Dashboard extends Controller {
-		
+	
+    List<String> cookies;
+    static HttpsURLConnection conn;
+    
+    final String USER_AGENT = "Mozilla/5.0";
+    
 	public static Result home(){
 		String email = session("email");
 		User user = User.find.where().eq("email", email).findUnique();
@@ -54,8 +68,29 @@ public class Dashboard extends Controller {
 		return ok(result);
 	}
 	
-    public static Result getMoodleTasks(){
-    	URL url = null;
+    public static Result getMoodleTasks() throws Exception{
+        
+        String moodleUrl = "https://moodle2.uncc.edu/login/index.php";
+        String calendarExport = "https://moodle2.uncc.edu/calendar/export.php";
+     
+        MoodleScraper http = new MoodleScraper();
+     
+        // make sure cookies is turn on
+        CookieHandler.setDefault(new CookieManager());
+     
+        // 1. Send a "GET" request, so that you can extract the form's data.
+        String page = http.GetPageContent(moodleUrl);
+        String postParams = http.getFormParams(page, "", "");
+     
+        // 2. Construct above post's content and then send a POST request for
+        // authentication
+        http.sendPost(moodleUrl, postParams);
+     
+        // 3. success then go to gmail.
+        String result = http.GetPageContent(calendarExport);
+        System.out.println(result);
+        
+        URL url = null;
     	InputStream moodleTasks = null;
     	Calendar calendar = null;
         try {

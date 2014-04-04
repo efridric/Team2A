@@ -13,6 +13,8 @@ public class User extends Model {
 	public String firstName;
 	public String lastName;
 	public String password;
+	public String moodleLogin;
+	public String moodlePassword;
 	
 	public User(String email, String firstName, String lastName, String password){
 		this.email = email;
