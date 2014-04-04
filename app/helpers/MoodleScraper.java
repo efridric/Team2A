@@ -2,15 +2,21 @@ package helpers;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+
 import javax.net.ssl.HttpsURLConnection;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,8 +42,10 @@ public class MoodleScraper {
     conn.setRequestProperty("Accept-Language", "en-US,en;q=0.8");
     conn.setRequestProperty("Cache-Control", "max-age=0");
     conn.setRequestProperty("Connection", "keep-alive");
-    for (String cookie : this.cookies) {
-        conn.addRequestProperty("Cookie", cookie.split(";", 1)[0]);
+    if (cookies != null) {
+        for (String cookie : this.cookies) {
+            conn.addRequestProperty("Cookie", cookie.split(";", 1)[0]);
+        }
     }
     conn.setRequestProperty("Host", "moodle2.uncc.edu");
     conn.setRequestProperty("User-Agent", USER_AGENT);
@@ -77,12 +85,12 @@ public class MoodleScraper {
     // default is GET
     conn.setRequestMethod("GET");
  
-    conn.setUseCaches(false);
+   // conn.setUseCaches(false);
  
     // act like a browser
     conn.setRequestProperty("User-Agent", USER_AGENT);
     conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-    conn.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
+    conn.setRequestProperty("Accept-Encoding", "gzip");
     conn.setRequestProperty("Accept-Language", "en-US,en;q=0.8");
     conn.setRequestProperty("Cache-Control", "max-age=0");
     conn.setRequestProperty("Connection", "keep-alive");
@@ -96,19 +104,34 @@ public class MoodleScraper {
     System.out.println("\nSending 'GET' request to URL : " + url);
     System.out.println("Response Code : " + responseCode);
  
-    BufferedReader in = 
-            new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//    BufferedReader in = 
+//            new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//    String inputLine;
+//    StringBuffer response = new StringBuffer();
+// 
+//    while ((inputLine = in.readLine()) != null) {
+//        response.append(inputLine);
+//    }
+//    in.close();
+    
+    InputStream in = conn.getInputStream();
+    InputStream gz =  new GZIPInputStream(in);
+    Reader decoder = new InputStreamReader(gz, "UTF-8");
+    BufferedReader br = new BufferedReader(decoder);
     String inputLine;
     StringBuffer response = new StringBuffer();
- 
-    while ((inputLine = in.readLine()) != null) {
-        response.append(inputLine);
-    }
-    in.close();
+    
+	while ((inputLine = br.readLine()) != null) {
+	  response.append(inputLine);
+	}
+	in.close();
+    
+    
  
     // Get the response cookies
     setCookies(conn.getHeaderFields().get("Set-Cookie"));
- 
+    
+    //System.out.println(response.toString());
     return response.toString();
  
   }
@@ -119,18 +142,14 @@ public class MoodleScraper {
     System.out.println("Extracting form's data...");
  
     Document doc = Jsoup.parse(html);
-    System.out.println(doc.getElementsByTag("body").toString());
     // Moodle form id
     Element loginform = doc.getElementById("login");
-    
-    Elements login = doc.getElementsByClass("loginform");
-    
-    Elements inputElements = login.first().getElementsByClass("form-input");
+    Elements login = loginform.getElementsByClass("loginform");
+    Elements inputElements = login.first().getElementsByTag("input");
     List<String> paramList = new ArrayList<String>();
     for (Element inputElement : inputElements) {
         String key = inputElement.attr("name");
         String value = inputElement.attr("value");
- 
         if (key.equals("username"))
             value = username;
         else if (key.equals("password"))
@@ -148,6 +167,23 @@ public class MoodleScraper {
         }
     }
     return result.toString();
+  }
+  
+  public Hashtable<String, String> getCalUrlParams(String html){
+	  Document doc = Jsoup.parse(html);
+	  Hashtable<String, String> paramList = new Hashtable<String,String>();
+	  
+	  Elements inputElements = doc.getElementsByTag("input");
+	  for(Element inputElement: inputElements){
+		  	String key = inputElement.attr("name");
+			String value = inputElement.attr("value"); 
+			if (key.equals("userid"))
+			    paramList.put(key,value);
+			else if (key.equals("authtoken"))
+			    paramList.put(key,value);
+	  }
+	  
+	  return paramList;
   }
  
   public List<String> getCookies() {

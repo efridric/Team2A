@@ -11,8 +11,11 @@ import java.io.InputStreamReader;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,6 +28,9 @@ import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.*;
+import org.apache.http.message.BasicNameValuePair;
 
 import models.Task;
 import models.User;
@@ -72,6 +78,7 @@ public class Dashboard extends Controller {
         
         String moodleUrl = "https://moodle2.uncc.edu/login/index.php";
         String calendarExport = "https://moodle2.uncc.edu/calendar/export.php";
+        String host= "moodle2.uncc.edu";
      
         MoodleScraper http = new MoodleScraper();
      
@@ -86,18 +93,28 @@ public class Dashboard extends Controller {
         // authentication
         http.sendPost(moodleUrl, postParams);
      
-        // 3. success then go to gmail.
+        // 3. success then go to calendar export page
         String result = http.GetPageContent(calendarExport);
-        System.out.println(result);
+        
+        // 4. get userid and authtoken from moodle
+        Hashtable<String,String> moodleParams = http.getCalUrlParams(result);
         
         URL url = null;
     	InputStream moodleTasks = null;
     	Calendar calendar = null;
-        try {
-            url = new URL("https://moodle2.uncc.edu/calendar/export_execute.php?userid=25082&authtoken=771b8877ddd978a54fabf8a919323d6a03345e2b&preset_what=all&preset_time=weeknow");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    	
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("userid", moodleParams.get("userid")));
+        params.add(new BasicNameValuePair("authtoken", moodleParams.get("authtoken")));
+        params.add(new BasicNameValuePair("preset_what", "all"));
+        params.add(new BasicNameValuePair("preset_time", "recentupcoming"));
+        URI uri = URIUtils.createURI("https", host, -1, "/calendar/export_execute.php", URLEncodedUtils.format(params, "UTF-8"), null);
+        
+        url = uri.toURL();
+        
+        
+		//url = new URL("https://moodle2.uncc.edu/calendar/export_execute.php?userid=25082&authtoken=771b8877ddd978a54fabf8a919323d6a03345e2b&preset_what=all&preset_time=weeknow");
+        
     	try {
     	    moodleTasks = IOUtils.toBufferedInputStream(url.openStream());
         } catch (IOException e) {
