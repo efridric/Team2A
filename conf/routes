@@ -10,6 +10,8 @@ POST	/							controllers.Application.signInOrSignUp()
 GET     /dashboard			    	controllers.Dashboard.home()
 GET		/dashboard/getEvents		controllers.Dashboard.getEvents()
 GET		/dashboard/getMoodleTasks   controllers.Dashboard.getMoodleTasks()
+GET		/dashboard/addCredentials   controllers.Dashboard.addCredentials()
+POST	/dashboard/saveCredentials  controllers.Dashboard.saveCredentials()
 GET 	/editAccount				controllers.Application.editAccount()
 POST	/editAccount				controllers.Application.updateAccount()
 

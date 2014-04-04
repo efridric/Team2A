@@ -45,14 +45,26 @@ import play.libs.Json;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import controllers.Application.SignUp;
+
 
 public class Dashboard extends Controller {
 	
-    List<String> cookies;
-    static HttpsURLConnection conn;
-    
-    final String USER_AGENT = "Mozilla/5.0";
-    
+	public static class AddCredentials {
+
+        public String username;
+        public String password;
+        public String vpassword;
+        
+        public String validate() {
+        	if(!password.equals(vpassword)){
+	    		return "Passwords do not match";
+	    	}
+        	return null;
+        }
+	}
+
+	    
 	public static Result home(){
 		String email = session("email");
 		User user = User.find.where().eq("email", email).findUnique();
@@ -74,8 +86,43 @@ public class Dashboard extends Controller {
 		return ok(result);
 	}
 	
+	public static Result addCredentials(){
+		String email = session("email");
+		return ok(
+				addCredentials.render(
+						User.find.where().eq("email", email).findUnique(),
+						form(AddCredentials.class)
+				)
+		);
+	}
+	
+    public static Result saveCredentials(){
+    	User user = User.find.where().eq("email", session("email")).findUnique();
+    	Form<AddCredentials> addCredentialsForm = Form.form(AddCredentials.class).bindFromRequest();
+		if(addCredentialsForm.hasErrors()){
+			return badRequest(addCredentials.render(
+									user,
+									addCredentialsForm
+							  ));
+		}
+		else{
+			user.moodleLogin = addCredentialsForm.get().username;
+			user.moodlePassword = addCredentialsForm.get().password;
+	    	user.save();
+	    	return redirect(routes.Dashboard.getMoodleTasks());
+
+    	}
+    }
+	
     public static Result getMoodleTasks() throws Exception{
         
+    	User user = User.find.where().eq("email", session("email")).findUnique();
+    	
+    	if(user.moodleLogin == null){
+    		return redirect(routes.Dashboard.addCredentials());
+    	}
+
+    	
         String moodleUrl = "https://moodle2.uncc.edu/login/index.php";
         String calendarExport = "https://moodle2.uncc.edu/calendar/export.php";
         String host= "moodle2.uncc.edu";
@@ -85,18 +132,18 @@ public class Dashboard extends Controller {
         // make sure cookies is turn on
         CookieHandler.setDefault(new CookieManager());
      
-        // 1. Send a "GET" request, so that you can extract the form's data.
+        //Send a "GET" request, so that you can extract the form's data.
         String page = http.GetPageContent(moodleUrl);
-        String postParams = http.getFormParams(page, "", "");
+        String postParams = http.getFormParams(page, user.moodleLogin, user.moodlePassword);
      
-        // 2. Construct above post's content and then send a POST request for
+        //Construct above post's content and then send a POST request for
         // authentication
         http.sendPost(moodleUrl, postParams);
      
-        // 3. success then go to calendar export page
+        //success then go to calendar export page
         String result = http.GetPageContent(calendarExport);
         
-        // 4. get userid and authtoken from moodle
+        //get userid and authtoken from moodle
         Hashtable<String,String> moodleParams = http.getCalUrlParams(result);
         
         URL url = null;
@@ -108,13 +155,10 @@ public class Dashboard extends Controller {
         params.add(new BasicNameValuePair("authtoken", moodleParams.get("authtoken")));
         params.add(new BasicNameValuePair("preset_what", "all"));
         params.add(new BasicNameValuePair("preset_time", "recentupcoming"));
-        URI uri = URIUtils.createURI("https", host, -1, "/calendar/export_execute.php", URLEncodedUtils.format(params, "UTF-8"), null);
-        
+        @SuppressWarnings("deprecation")
+		URI uri = URIUtils.createURI("https", host, -1, "/calendar/export_execute.php", URLEncodedUtils.format(params, "UTF-8"), null);
         url = uri.toURL();
-        
-        
-		//url = new URL("https://moodle2.uncc.edu/calendar/export_execute.php?userid=25082&authtoken=771b8877ddd978a54fabf8a919323d6a03345e2b&preset_what=all&preset_time=weeknow");
-        
+                
     	try {
     	    moodleTasks = IOUtils.toBufferedInputStream(url.openStream());
         } catch (IOException e) {
