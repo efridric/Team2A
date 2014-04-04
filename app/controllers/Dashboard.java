@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -174,15 +175,33 @@ public class Dashboard extends Controller {
             e.printStackTrace();
         }
     	
-    	for (Iterator i = calendar.getComponents().iterator(); i.hasNext();) {
+    	for (@SuppressWarnings("rawtypes")
+		Iterator i = calendar.getComponents().iterator(); i.hasNext();) {
     	    Component component = (Component) i.next();
     	    System.out.println("Component [" + component.getName() + "]");
-
-    	    for (Iterator j = component.getProperties().iterator(); j.hasNext();) {
+    	    Task task = new Task();
+    	    for (@SuppressWarnings("rawtypes")
+			Iterator j = component.getProperties().iterator(); j.hasNext();) {
     	        Property property = (Property) j.next();
+    	        String p = property.getName().toLowerCase();
+    	        if(p.equals("summary"))
+    	        	task.title = property.getValue();
+    	        if(p.equals("description"))
+    	        	task.description = property.getValue();
+//        	    if(p.equals("dtstamp"))
+//        	    	task.dueDate = new Date(property.getValue());
+//        	    if(p.equals("dtstart"))
+//        	    if(p.equals("categories"))
+
+
+    	        
     	        System.out.println("Property [" + property.getName() + ", " + property.getValue() + "]");
     	    }
+    	    
+    	    Task.create(task, user.id);
     	}
+    	
+    	
     	
     	return redirect(routes.Dashboard.home());
     }

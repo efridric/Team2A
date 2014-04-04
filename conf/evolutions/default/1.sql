@@ -17,8 +17,11 @@ create table commitment (
 create table task (
   id                        bigint not null,
   title                     varchar(255),
+  description               varchar(255),
   is_complete               boolean,
   due_date                  date,
+  start_time                date,
+  end_time                  date,
   owner_id                  bigint,
   source                    varchar(255),
   effort                    time,

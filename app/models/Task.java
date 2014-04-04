@@ -16,8 +16,11 @@ public class Task extends Model {
 	@Id
 	public Long id;
 	public String title;
+	public String description;
 	public boolean isComplete = false;
-	public Date dueDate;
+	public Date dueDate = null;
+	public Date startTime;
+	public Date endTime;
 	@ManyToOne
 	public Long ownerId;
 	public String source;
