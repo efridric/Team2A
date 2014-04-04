@@ -107,7 +107,7 @@ public class Dashboard extends Controller {
 		}
 		else{
 			user.moodleLogin = addCredentialsForm.get().username;
-			user.moodlePassword = addCredentialsForm.get().password;
+			user.moodlePassword = User.encryptPassword(addCredentialsForm.get().password);
 	    	user.save();
 	    	return redirect(routes.Dashboard.getMoodleTasks());
 

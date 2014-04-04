@@ -31,7 +31,7 @@ create table user (
   email                     varchar(255),
   first_name                varchar(255),
   last_name                 varchar(255),
-  password                  varchar(255),
+  password                  varchar(60),
   moodle_login              varchar(255),
   moodle_password           varchar(255),
   constraint pk_user primary key (id))

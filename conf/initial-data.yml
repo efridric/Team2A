@@ -5,7 +5,7 @@
   email: test@test.com
   firstName: The
   lastName: Tester
-  password: test
+  password: $2a$10$HrudOMNtk08UVbueq00zReyn587qbJShIx3GuOdVWLQ0iJh7EAEzG
   
 # Tasks
 

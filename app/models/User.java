@@ -1,7 +1,13 @@
 package models;
 
 import javax.persistence.*;
+import javax.validation.Constraint;
+
+import org.mindrot.jbcrypt.BCrypt;
+
+import play.data.validation.Constraints.MaxLength;
 import play.db.ebean.*;
+
 import com.avaje.ebean.*;
 
 @Entity 
@@ -12,6 +18,7 @@ public class User extends Model {
 	public String email;
 	public String firstName;
 	public String lastName;
+	@javax.persistence.Column(length=60)
 	public String password;
 	public String moodleLogin;
 	public String moodlePassword;
@@ -20,7 +27,8 @@ public class User extends Model {
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.password = password;
+		this.password = encryptPassword(password);
+		System.out.println(this.password);
 	}
 	
 	public static Finder<Long, User> find = new Finder<Long,User>(
@@ -28,8 +36,16 @@ public class User extends Model {
 	);
 	
 	public static User authenticate(String email, String password){
-		return find.where().eq("email", email)
-				.eq("password", password).findUnique();
+		User user = User.find.where().eq("email", email).findUnique();
+		if(BCrypt.checkpw(password, user.password)){
+			return user;
+		}
+		return null;
 	}
+	
+	public static String encryptPassword(String password) {
+		return BCrypt.hashpw(password, BCrypt.gensalt());
+	}
+	
 }
 
