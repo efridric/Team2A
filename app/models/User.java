@@ -3,6 +3,7 @@ package models;
 import javax.persistence.*;
 import javax.validation.Constraint;
 
+import org.apache.commons.codec.binary.Base64;
 import org.mindrot.jbcrypt.BCrypt;
 
 import play.data.validation.Constraints.MaxLength;
@@ -45,6 +46,16 @@ public class User extends Model {
 	
 	public static String encryptPassword(String password) {
 		return BCrypt.hashpw(password, BCrypt.gensalt());
+	}
+	
+	public static String encodeMoodle(String password) {
+		byte[] bytesEncoded = Base64.encodeBase64(password.getBytes());
+		return new String(bytesEncoded);
+	}
+	
+	public static String decodeMoodle(User user) {
+		byte[] valueDecoded= Base64.decodeBase64(user.moodlePassword);
+		return new String(valueDecoded);
 	}
 	
 }

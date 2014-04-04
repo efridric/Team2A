@@ -107,7 +107,7 @@ public class Dashboard extends Controller {
 		}
 		else{
 			user.moodleLogin = addCredentialsForm.get().username;
-			user.moodlePassword = User.encryptPassword(addCredentialsForm.get().password);
+			user.moodlePassword = User.encodeMoodle(addCredentialsForm.get().password);
 	    	user.save();
 	    	return redirect(routes.Dashboard.getMoodleTasks());
 
@@ -134,7 +134,7 @@ public class Dashboard extends Controller {
      
         //Send a "GET" request, so that you can extract the form's data.
         String page = http.GetPageContent(moodleUrl);
-        String postParams = http.getFormParams(page, user.moodleLogin, user.moodlePassword);
+        String postParams = http.getFormParams(page, user.moodleLogin, User.decodeMoodle(user));
      
         //Construct above post's content and then send a POST request for
         // authentication
