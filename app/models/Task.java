@@ -2,6 +2,7 @@ package models;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.*;
@@ -17,10 +18,10 @@ public class Task extends Model {
 	public Long id;
 	public String title;
 	public String description;
+	public String category;
 	public boolean isComplete = false;
-	public Date dueDate = null;
-	public Date startTime;
-	public Date endTime;
+	public Timestamp end = null;
+	public Timestamp start = null;
 	@ManyToOne
 	public Long ownerId;
 	public String source;

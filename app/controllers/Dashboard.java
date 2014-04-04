@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -188,10 +189,20 @@ public class Dashboard extends Controller {
     	        	task.title = property.getValue();
     	        if(p.equals("description"))
     	        	task.description = property.getValue();
-//        	    if(p.equals("dtstamp"))
-//        	    	task.dueDate = new Date(property.getValue());
-//        	    if(p.equals("dtstart"))
-//        	    if(p.equals("categories"))
+        	    if(p.equals("dtstart")){
+        	    	String d = property.getValue();
+        	    	String year = d.substring(0, 4);
+        	    	String month = d.substring(4, 6);
+        	    	String day = d.substring(6,8);
+        	    	String hour = d.substring(9,11);
+        	    	String minute = d.substring(11, 13);
+        	    	String second = d.substring(13,15);
+        	    	System.out.println(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
+        	    	task.end = Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
+        	    	task.start = task.end;
+        	    }
+        	    if(p.equals("categories"))
+        	    	task.category = property.getValue();
 
 
     	        
