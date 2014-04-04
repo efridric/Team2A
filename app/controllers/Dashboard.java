@@ -199,7 +199,7 @@ public class Dashboard extends Controller {
         	    	String second = d.substring(13,15);
         	    	System.out.println(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
         	    	task.end = Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
-        	    	task.start = task.end;
+        	    	task.start = new Timestamp(task.end.getTime() - 60 * 60 * 1000);
         	    }
         	    if(p.equals("categories"))
         	    	task.category = property.getValue();
