@@ -6,6 +6,9 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import play.db.ebean.*;
 
@@ -19,17 +22,17 @@ public class Task extends Model {
 	public String title;
 	public String description;
 	public String category;
-	public boolean isComplete = false;
+	public int isComplete = 0;
 	public Timestamp end = null;
 	public Timestamp start = null;
 	@ManyToOne
 	public Long ownerId;
 	public String source;
 	public Time effort;
-	public int prority;
+	public int priority;
 	
 	public static Finder<Long,Task> find = new Finder<Long, Task>(Long.class, Task.class);
-	
+
 	public static List<Task> listTasks(Long id){
 		return find.where()
 				.eq("ownerId", id)

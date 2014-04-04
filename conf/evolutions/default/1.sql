@@ -19,13 +19,13 @@ create table task (
   title                     varchar(255),
   description               varchar(255),
   category                  varchar(255),
-  is_complete               boolean,
+  is_complete               integer,
   end                       timestamp,
   start                     timestamp,
   owner_id                  bigint,
   source                    varchar(255),
   effort                    time,
-  prority                   integer,
+  priority                  integer,
   constraint pk_task primary key (id))
 ;
 
