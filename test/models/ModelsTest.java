@@ -55,11 +55,11 @@ public class ModelsTest extends WithApplication {
 
 /******************************** Commitment Model Tests **********************************/
 
-	@Test
-	public void findCommitment(){
-		User u1 = User.find.where().eq("email", "test@test.com").findUnique();
-		List<Commitment> commitments = Commitment.listCommitments(u1.id);
-		assertEquals(commitments.get(0).title, "test");
-		assertEquals(commitments.get(0).owner, u1);
-	}
+//	@Test
+//	public void findCommitment(){
+//		User u1 = User.find.where().eq("email", "test@test.com").findUnique();
+//		List<Commitment> commitments = Commitment.listCommitments(u1.id);
+//		assertEquals(commitments.get(0).title, "test");
+//		assertEquals(commitments.get(0).owner, u1);
+//	}
 }
