@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/team2a -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=com.mysql.jdbc.Driver -Ddb.default.url=${database_url}
+web: target/universal/stage/bin/team2a -Dhttp.port=${PORT} -DapplyEvolutions.default=true
