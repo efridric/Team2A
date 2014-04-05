@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/team2a -Dhttp.port=${PORT} ${java_opts} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL}
+web: target/universal/stage/bin/team2a -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL} -Ddb.default.user=xbwzrknwxmqixs -Ddb.default.password=Oqp5drqrtHq6Ic2rAFvpcSIi3
