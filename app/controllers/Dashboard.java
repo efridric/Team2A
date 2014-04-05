@@ -186,7 +186,7 @@ public class Dashboard extends Controller {
     	        Property property = (Property) j.next();
     	        String p = property.getName().toLowerCase();
     	        if(p.equals("summary"))
-    	        	task.title = property.getValue();
+    	        	task.title = property.getValue().substring(0,254);
     	        if(p.equals("description"))
     	        	task.description = property.getValue();
         	    if(p.equals("dtstart")){
