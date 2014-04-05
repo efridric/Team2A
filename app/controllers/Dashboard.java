@@ -185,8 +185,10 @@ public class Dashboard extends Controller {
 			Iterator j = component.getProperties().iterator(); j.hasNext();) {
     	        Property property = (Property) j.next();
     	        String p = property.getName().toLowerCase();
+    	        if(p.length() > 255)
+    	            p = p.substring(0, 254);
     	        if(p.equals("summary"))
-    	        	task.title = property.getValue().substring(0,254);
+    	        	task.title = property.getValue();
     	        if(p.equals("description"))
     	        	task.description = property.getValue();
         	    if(p.equals("dtstart")){
