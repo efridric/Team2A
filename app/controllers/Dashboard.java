@@ -78,6 +78,20 @@ public class Dashboard extends Controller {
 		);
 	}
 	
+    public static Result addTask(){
+        return ok(
+                addTask.render(
+                   User.find.where().eq("email", session("email")).findUnique(), 
+                   new Task.class,
+                   form(Task.class)
+                )
+        );
+    }
+    
+    public static Result updateTask(){
+    	return ok("Wow");
+    }
+	
 	public static Result getEvents(){
 		String email = session("email");
 		User user = User.find.where().eq("email", email).findUnique();
@@ -115,7 +129,7 @@ public class Dashboard extends Controller {
 
     	}
     }
-	
+    	
     public static Result getMoodleTasks() throws Exception{
         
     	User user = User.find.where().eq("email", session("email")).findUnique();

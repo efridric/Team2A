@@ -12,6 +12,8 @@ GET		/dashboard/getEvents		controllers.Dashboard.getEvents()
 GET		/dashboard/getMoodleTasks   controllers.Dashboard.getMoodleTasks()
 GET		/dashboard/addCredentials   controllers.Dashboard.addCredentials()
 POST	/dashboard/saveCredentials  controllers.Dashboard.saveCredentials()
+GET		/dashboard/addTask          controllers.Dashboard.addTask()
+POST	/dashboard/updateTask		controllers.Dashboard.updateTask()
 GET 	/editAccount				controllers.Application.editAccount()
 POST	/editAccount				controllers.Application.updateAccount()
 
