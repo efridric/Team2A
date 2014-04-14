@@ -31,7 +31,8 @@
 					       <input class="form-control" type="hidden" name="source" value="@task.source">
 					       <input class="form-control" type="hidden" name="effort" value="@task.effort">
 					       <input class="form-control" type="hidden" name="priority" value="@task.priority">
-					   </div>
+					       <input class="form-control" type="hidden" name="ownerId" value="@user.id">
+ 					   </div>
 					       <button class="btn btn-success" type="submit" name="action" value="save">Save</button>
 					       <a href="/dashboard" class="btn btn-primary" role="button">Cancel</a>
 					       <button class="btn btn-danger" type="submit" name="action" value="delete">Delete Task</button>

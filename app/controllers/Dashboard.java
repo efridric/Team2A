@@ -79,17 +79,35 @@ public class Dashboard extends Controller {
 	}
 	
     public static Result addTask(){
+    	Task task = new Task();
         return ok(
-                addTask.render(
+                taskView.render(
                    User.find.where().eq("email", session("email")).findUnique(), 
-                   new Task.class,
+                   task,
                    form(Task.class)
                 )
         );
     }
     
     public static Result updateTask(){
-    	return ok("Wow");
+    	User user = User.find.where().eq("email", session("email")).findUnique();
+    	if((request().body().asFormUrlEncoded().get("action"))[0].equals("delete")){
+    		return redirect(routes.Dashboard.home());
+    	}
+    	else{
+	    	Form<Task> updateTaskForm = Form.form(Task.class).bindFromRequest();
+			if(updateTaskForm.hasErrors()){
+				return badRequest(taskView.render(
+						 				user,
+						 				updateTaskForm.get(),
+						 				updateTaskForm
+								  ));
+			}
+			else{
+				Task.create(updateTaskForm.get(), user.id);
+				return redirect(routes.Dashboard.home());			
+			}
+    	}
     }
 	
 	public static Result getEvents(){

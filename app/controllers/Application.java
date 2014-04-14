@@ -98,7 +98,6 @@ public class Application extends Controller {
         return ok(
                 editAccount.render(
                    User.find.where().eq("email", session("email")).findUnique(), 
-                   new Task(),
                    form(SignUp.class)
                 )
         );
