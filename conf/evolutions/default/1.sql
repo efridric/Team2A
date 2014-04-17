@@ -4,10 +4,10 @@
 # --- !Ups
 
 create table commitment (
-  id                        bigint auto_increment not null,
+  id                        bigint not null,
   title                     varchar(255),
   date                      date,
-  repeating                 tinyint(1) default 0,
+  repeating                 boolean,
   owner_id                  bigint,
   source                    varchar(255),
   duration                  time,
@@ -15,13 +15,13 @@ create table commitment (
 ;
 
 create table task (
-  id                        bigint auto_increment not null,
+  id                        bigint not null,
   title                     varchar(255),
   description               varchar(255),
   category                  varchar(255),
   is_complete               integer,
-  end                       datetime,
-  start                     datetime,
+  end                       timestamp,
+  start                     timestamp,
   owner_id                  bigint,
   source                    varchar(255),
   effort                    time,
@@ -30,7 +30,7 @@ create table task (
 ;
 
 create table user (
-  id                        bigint auto_increment not null,
+  id                        bigint not null,
   email                     varchar(255),
   first_name                varchar(255),
   last_name                 varchar(255),
@@ -40,6 +40,12 @@ create table user (
   constraint pk_user primary key (id))
 ;
 
+create sequence commitment_seq;
+
+create sequence task_seq;
+
+create sequence user_seq;
+
 alter table commitment add constraint fk_commitment_owner_1 foreign key (owner_id) references user (id) on delete restrict on update restrict;
 create index ix_commitment_owner_1 on commitment (owner_id);
 
@@ -47,13 +53,19 @@ create index ix_commitment_owner_1 on commitment (owner_id);
 
 # --- !Downs
 
-SET FOREIGN_KEY_CHECKS=0;
+SET REFERENTIAL_INTEGRITY FALSE;
 
-drop table commitment;
+drop table if exists commitment;
 
-drop table task;
+drop table if exists task;
 
-drop table user;
+drop table if exists user;
 
-SET FOREIGN_KEY_CHECKS=1;
+SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists commitment_seq;
+
+drop sequence if exists task_seq;
+
+drop sequence if exists user_seq;
 
