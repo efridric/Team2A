@@ -7,6 +7,8 @@ import models.*;
 import org.junit.*;
 
 import com.avaje.ebean.Ebean;
+import org.apache.commons.codec.binary.Base64;
+import org.mindrot.jbcrypt.BCrypt;
 
 import static org.junit.Assert.*;
 import play.libs.Yaml;
@@ -43,7 +45,32 @@ public class ModelsTest extends WithApplication {
 		assertEquals("last", test.lastName);
 	}
 	
+	@Test
+	public void auhenticateUser(){
+		new User("update@test.com", "Mr.", "Tester", "test");
+		User test1 = User.authenticate("update@test.com" , "test");
+		assertNotNull(test1);
+	}
+	
+	@Test
+	public void encodeDecodeMoodle(){
+		new User("student@uncc.edu", "fName", "lName", "password").save();
+		User student = User.find.where().eq("email", "student@uncc.edu").findUnique();
+		assertNotNull(student);
+		student.moodlePassword = student.encodeMoodle("password");	
+		assertEquals(User.decodeMoodle(student), "password");
+		
+	}
+
+	
+	
 /******************************** Task Model Tests **********************************/
+	
+	@Test
+	public void createTask(){
+		new User("User@user.com", "firstname", "lastname", "password");
+		User student = User.find.where().eq("email", "User@user.com").findUnique();
+	}
 	
 	@Test
 	public void findTask(){
