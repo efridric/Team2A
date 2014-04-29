@@ -31,7 +31,7 @@ public class ModelsTest extends WithApplication {
 	}
 	
 	@Test
-	public void createAndUpdate(){
+	public void createAndUpdateUser(){
 		new User("tester@test.com", "Mr.", "Tester", "test").save();
 		User test = User.find.where().eq("email", "tester@test.com").findUnique();
 		assertNotNull(test);
@@ -61,24 +61,53 @@ public class ModelsTest extends WithApplication {
 		assertEquals(User.decodeMoodle(student), "password");
 		
 	}
+	
+	@Test
+	public void deleteUser(){
+		new User("student@uncc.edu", "fName", "lName", "password").save();
+		User student = User.find.where().eq("email", "student@uncc.edu").findUnique();
+		student.delete();
+		assertNull(User.find.where().eq("email", "student@uncc.edu").findUnique());
+
+		
+	}
 
 	
 	
 /******************************** Task Model Tests **********************************/
 	
 	@Test
-	public void createTask(){
-		new User("User@user.com", "firstname", "lastname", "password");
-		User student = User.find.where().eq("email", "User@user.com").findUnique();
-	}
-	
-	@Test
-	public void findTask(){
+	public void findAndUpdateTask(){
 		User u1 = User.find.where().eq("email", "test@test.com").findUnique();
 		List<Task> tasks = Task.listTasks(u1.id);
 		assertEquals(tasks.get(0).title, "test task 1");
 		assertEquals(tasks.get(1).ownerId, u1.id);
+		tasks.get(0).title = "updated";
+		assertEquals(tasks.get(0).title, "updated");
+		assertEquals(tasks.get(1).ownerId, u1.id);
+		
 	}
+	
+	@Test
+	public void createAndDeleteTask(){
+		User u1 = User.find.where().eq("email", "test@test.com").findUnique();
+		u1.id = 44L;
+		Task t = new Task();
+		Task t1 = new Task();
+		t.title = "title";
+		t1.title = "title2";
+        Task.create(t, u1.id);
+		List<Task> tasks = Task.listTasks(u1.id);
+		assertEquals(tasks.get(0).title, "title");
+		assertEquals(tasks.get(0).ownerId, u1.id);
+		tasks.get(0).delete();
+		assertNotEquals(tasks.get(0).title, "title");
+
+		
+	}
+	
+	
+	
 
 /******************************** Commitment Model Tests **********************************/
 
