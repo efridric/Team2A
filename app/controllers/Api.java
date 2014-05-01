@@ -54,8 +54,7 @@ public class Api extends Controller{
 			xml += "<priority>"+task.priority+"</priority>";
 			xml += "</task>";
 		}
-		
-		
+
 		return ok(xml);
 	}
 }

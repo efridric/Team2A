@@ -29,7 +29,6 @@ public class User extends Model {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = encryptPassword(password);
-		System.out.println(this.password);
 	}
 	
 	public static Finder<Long, User> find = new Finder<Long,User>(
