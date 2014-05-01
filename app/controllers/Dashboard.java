@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -22,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.persistence.ManyToOne;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
@@ -65,6 +67,20 @@ public class Dashboard extends Controller {
         	return null;
         }
 	}
+	
+	public static class TaskForm {
+	    public Long id;
+	    public String title;
+	    public String description;
+	    public String category;
+	    public String isComplete= "0";
+	    public String end = null;
+	    public String start = null;
+	    public Long ownerId;
+	    public String source;
+	    public String effort;
+	    public String priority;
+	}
 
 	    
 	public static Result home(){
@@ -79,12 +95,11 @@ public class Dashboard extends Controller {
 	}
 	
     public static Result addTask(){
-    	Task task = new Task();
         return ok(
                 taskView.render(
                    User.find.where().eq("email", session("email")).findUnique(), 
-                   task,
-                   form(Task.class)
+                   new Task(),
+                   form(TaskForm.class)
                 )
         );
     }
@@ -95,16 +110,28 @@ public class Dashboard extends Controller {
     		return redirect(routes.Dashboard.home());
     	}
     	else{
-	    	Form<Task> updateTaskForm = Form.form(Task.class).bindFromRequest();
+	    	Form<TaskForm> updateTaskForm = Form.form(TaskForm.class).bindFromRequest();
+	    	Task task = new Task();
+	    	task.title = updateTaskForm.get().title;
+	    	task.description = updateTaskForm.get().description;
+	    	task.category = updateTaskForm.get().category;
+	    	task.isComplete = Integer.parseInt(updateTaskForm.get().isComplete);
+	    	task.start = stringToTimestamp(updateTaskForm.get().start);
+	    	task.end = stringToTimestamp(updateTaskForm.get().end);
+	    	task.ownerId = user.id;
+	    	task.source = updateTaskForm.get().source;
+	    	task.effort = null;
+	    	task.priority = Integer.parseInt(updateTaskForm.get().priority);
+	    	
 			if(updateTaskForm.hasErrors()){
 				return badRequest(taskView.render(
 						 				user,
-						 				updateTaskForm.get(),
+						 				task,
 						 				updateTaskForm
 								  ));
 			}
 			else{
-				Task.create(updateTaskForm.get(), user.id);
+				Task.create(task, user.id);
 				return redirect(routes.Dashboard.home());			
 			}
     	}
@@ -250,5 +277,24 @@ public class Dashboard extends Controller {
     	
     	
     	return redirect(routes.Dashboard.home());
+    }
+    
+    public static Timestamp stringToTimestamp(String d){
+        if(d.length() == 18){
+            d = d.substring(0, 11) + "0" + d.substring(11,18);
+        }
+        System.out.println(d);
+        String year = d.substring(6, 10);
+        String month = d.substring(0, 2);
+        String day = d.substring(3, 5);
+        String hour = d.substring(11,13);
+        if(hour.equals("12"))
+            hour = "00";
+        if(d.substring(17,19).equals("PM"))
+            hour = Integer.toString((Integer.parseInt(hour) + 12)); 
+        String minute = d.substring(14,16);
+        String second = "00";
+        System.out.println(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
+        return Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
     }
 }

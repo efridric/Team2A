@@ -1,12 +1,15 @@
-@(user: User)(task: Task)(addTask: Form[Task])
+@(user: User)(task: Task)(addTask: Form[Dashboard.TaskForm])
 <html>
 	<head>
 		<title>Add Task</title>
 		<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-datetimepicker.min.css")">
+		<link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap-glyphicons.css"))'>
 		<link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
 		<script src="@routes.Assets.at("javascripts/jquery.min.js")" type="text/javascript"></script>
+		<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("moment.js"))'></script>
 		<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
-		<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap-datetimepicker.min.js"))'></script>
+		<script src="@routes.Assets.at("javascripts/bootstrap-datetimepicker.min.js")" type="text/javascript"></script>
 		<script src="@routes.Assets.at("javascripts/taskView.js")" type="text/javascript"></script>
 	</head>
 	<body>
@@ -20,13 +23,19 @@
 					       <input class="form-control" type="text" name="title" placeholder="Title" value="@task.title">
 					   </div>
 					   <div class="form-group">
-					       <input class="form-control" type="text" name="description" placeholder="description" value="@task.description">
-					   </div>
-						<div class="form-group">
-					       <input class="form-control form_datetime" type="date" name="start" placeholder="Start Time" value="@task.start">
+					       <input class="form-control" type="text" name="description" placeholder="Description" value="@task.description">
 					   </div>
 					   <div class="form-group">
-					       <input class="form-control form_datetime" type="date" name="end" placeholder="End Time" value="@task.end">
+					   	<div class="input-group date">
+					       <input class="form-control" type="text" name="start" placeholder="Start Time" value="@task.start">
+					       <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	    				</div>
+					   </div>
+					   <div class="form-group">
+					   	<div class="input-group date">
+					       <input class="form-control" type="text" name="end" placeholder="End Time" value="@task.end">
+					       <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	    				</div>
 					   </div>
 					   <div class="form-group">
 					       <input class="form-control" type="hidden" name="category" value="@task.category">
