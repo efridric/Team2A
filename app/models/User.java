@@ -1,5 +1,7 @@
 package models;
 
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 import javax.validation.Constraint;
 
@@ -23,6 +25,7 @@ public class User extends Model {
 	public String password;
 	public String moodleLogin;
 	public String moodlePassword;
+	public Timestamp lastUpdate = null;
 	
 	public User(String email, String firstName, String lastName, String password){
 		this.email = email;

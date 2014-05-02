@@ -37,6 +37,7 @@ create table user (
   password                  varchar(60),
   moodle_login              varchar(255),
   moodle_password           varchar(255),
+  last_update               timestamp,
   constraint pk_user primary key (id))
 ;
 

@@ -83,9 +83,12 @@ public class Dashboard extends Controller {
 	}
 
 	    
-	public static Result home(){
+	public static Result home() throws Exception{
 		String email = session("email");
 		User user = User.find.where().eq("email", email).findUnique();
+		Timestamp updateTime = new Timestamp(new java.util.Date().getTime() - 10*60*1000);
+		if(updateTime.after(user.lastUpdate))
+		    getMoodleTasks();
 		return ok(
 			dashboard.render(
 					user,
@@ -237,6 +240,7 @@ public class Dashboard extends Controller {
     	
     	for (@SuppressWarnings("rawtypes")
 		Iterator i = calendar.getComponents().iterator(); i.hasNext();) {
+    	    Timestamp t = null;
     	    Component component = (Component) i.next();
     	    System.out.println("Component [" + component.getName() + "]");
     	    Task task = new Task();
@@ -245,6 +249,7 @@ public class Dashboard extends Controller {
     	        Property property = (Property) j.next();
     	        String p = property.getName().toLowerCase();
     	        String v = property.getValue();
+    	        
     	        if(v.length() > 254)
     	           v = v.substring(0, 254);
     	        if(p.equals("summary"))
@@ -263,6 +268,16 @@ public class Dashboard extends Controller {
         	    	task.end = Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
         	    	task.start = new Timestamp(task.end.getTime() - 60 * 60 * 1000);
         	    }
+        	    if(p.equals("last-modified")){
+        	        String d = v;
+                    String year = d.substring(0, 4);
+                    String month = d.substring(4, 6);
+                    String day = d.substring(6,8);
+                    String hour = d.substring(9,11);
+                    String minute = d.substring(11, 13);
+                    String second = d.substring(13,15);
+                    t = Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
+        	    }
         	    if(p.equals("categories"))
         	    	task.category = property.getValue();
 
@@ -271,11 +286,15 @@ public class Dashboard extends Controller {
     	        System.out.println("Property [" + property.getName() + ", " + property.getValue() + "]");
     	    }
     	    
-    	    Task.create(task, user.id);
+    	    if(t == null || user.lastUpdate == null)
+    	        Task.create(task, user.id);
+    	    else if(t.after(user.lastUpdate))
+    	        Task.create(task, user.id);
     	}
     	
     	
-    	
+    	user.lastUpdate = new Timestamp(new java.util.Date().getTime());
+    	user.save();
     	return redirect(routes.Dashboard.home());
     }
     
