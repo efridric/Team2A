@@ -86,8 +86,8 @@ public class Dashboard extends Controller {
 	public static Result home() throws Exception{
 		String email = session("email");
 		User user = User.find.where().eq("email", email).findUnique();
-		Timestamp updateTime = new Timestamp(new java.util.Date().getTime() - 10*60*1000);
-		if(updateTime.after(user.lastUpdate))
+		Long updateTime = new java.util.Date().getTime() - 10*60*1000;
+		if(user.lastUpdate != 0 || updateTime > (user.lastUpdate))
 		    getMoodleTasks();
 		return ok(
 			dashboard.render(
@@ -102,7 +102,20 @@ public class Dashboard extends Controller {
                 taskView.render(
                    User.find.where().eq("email", session("email")).findUnique(), 
                    new Task(),
-                   form(TaskForm.class)
+                   form(TaskForm.class),
+                   "Add Task"
+                )
+        );
+    }
+    
+    public static Result editTask(Long tid){
+        Task task = Task.find.where().eq("id", tid).findUnique();
+        return ok(
+                taskView.render(
+                    User.find.where().eq("email", session("email")).findUnique(), 
+                    task,
+                    form(TaskForm.class),
+                    "Edit Task"
                 )
         );
     }
@@ -119,8 +132,8 @@ public class Dashboard extends Controller {
 	    	task.description = updateTaskForm.get().description;
 	    	task.category = updateTaskForm.get().category;
 	    	task.isComplete = Integer.parseInt(updateTaskForm.get().isComplete);
-	    	task.start = stringToTimestamp(updateTaskForm.get().start);
-	    	task.end = stringToTimestamp(updateTaskForm.get().end);
+	    	task.start = Long.parseLong(updateTaskForm.get().start);
+	    	task.end = Long.parseLong(updateTaskForm.get().end);
 	    	task.ownerId = user.id;
 	    	task.source = updateTaskForm.get().source;
 	    	task.effort = null;
@@ -130,11 +143,14 @@ public class Dashboard extends Controller {
 				return badRequest(taskView.render(
 						 				user,
 						 				task,
-						 				updateTaskForm
+						 				updateTaskForm,
+						 				"Error"
 								  ));
 			}
 			else{
-				Task.create(task, user.id);
+				task = Task.create(task, user.id);
+				task.url = "dashboard/editTask?tid="+Long.toString(task.id);
+				task.save();
 				return redirect(routes.Dashboard.home());			
 			}
     	}
@@ -240,7 +256,7 @@ public class Dashboard extends Controller {
     	
     	for (@SuppressWarnings("rawtypes")
 		Iterator i = calendar.getComponents().iterator(); i.hasNext();) {
-    	    Timestamp t = null;
+    	    Long t = Long.parseLong("0");
     	    Component component = (Component) i.next();
     	    System.out.println("Component [" + component.getName() + "]");
     	    Task task = new Task();
@@ -265,8 +281,8 @@ public class Dashboard extends Controller {
         	    	String minute = d.substring(11, 13);
         	    	String second = d.substring(13,15);
         	    	System.out.println(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
-        	    	task.end = Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
-        	    	task.start = new Timestamp(task.end.getTime() - 60 * 60 * 1000);
+        	    	task.end = (Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0")).getTime();
+        	    	task.start = task.end - 60 * 60 * 1000;
         	    }
         	    if(p.equals("last-modified")){
         	        String d = v;
@@ -276,7 +292,7 @@ public class Dashboard extends Controller {
                     String hour = d.substring(9,11);
                     String minute = d.substring(11, 13);
                     String second = d.substring(13,15);
-                    t = Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
+                    t = Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0").getTime();
         	    }
         	    if(p.equals("categories"))
         	    	task.category = property.getValue();
@@ -286,19 +302,20 @@ public class Dashboard extends Controller {
     	        System.out.println("Property [" + property.getName() + ", " + property.getValue() + "]");
     	    }
     	    
-    	    if(t == null || user.lastUpdate == null)
-    	        Task.create(task, user.id);
-    	    else if(t.after(user.lastUpdate))
-    	        Task.create(task, user.id);
+    	    if(t == 0 || user.lastUpdate == 0 || t > user.lastUpdate){
+    	        task = Task.create(task, user.id);
+    	        task.url = "dashboard/editTask?tid="+Long.toString(task.id);
+                task.save();
+    	    }
     	}
     	
     	
-    	user.lastUpdate = new Timestamp(new java.util.Date().getTime());
+    	user.lastUpdate = new java.util.Date().getTime();
     	user.save();
     	return redirect(routes.Dashboard.home());
     }
     
-    public static Timestamp stringToTimestamp(String d){
+    public static Long stringToTimestamp(String d){
         if(d.length() == 18){
             d = d.substring(0, 11) + "0" + d.substring(11,18);
         }
@@ -314,6 +331,7 @@ public class Dashboard extends Controller {
         String minute = d.substring(14,16);
         String second = "00";
         System.out.println(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
-        return Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0");
+        System.out.println(Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0").getTime());
+        return (Timestamp.valueOf(year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second+".0")).getTime();
     }
 }

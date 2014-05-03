@@ -25,7 +25,7 @@ public class User extends Model {
 	public String password;
 	public String moodleLogin;
 	public String moodlePassword;
-	public Timestamp lastUpdate = null;
+	public Long lastUpdate = Long.parseLong("0");
 	
 	public User(String email, String firstName, String lastName, String password){
 		this.email = email;

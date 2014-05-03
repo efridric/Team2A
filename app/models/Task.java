@@ -23,13 +23,14 @@ public class Task extends Model {
 	public String description;
 	public String category;
 	public int isComplete = 0;
-	public Timestamp end = null;
-	public Timestamp start = null;
+	public Long end = null;
+	public Long start = null;
 	@ManyToOne
 	public Long ownerId;
 	public String source;
 	public Time effort;
 	public int priority;
+	public String url;
 	
 	public static Finder<Long,Task> find = new Finder<Long, Task>(Long.class, Task.class);
 

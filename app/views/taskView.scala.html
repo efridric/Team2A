@@ -1,7 +1,7 @@
-@(user: User)(task: Task)(addTask: Form[Dashboard.TaskForm])
+@(user: User)(task: Task)(addTask: Form[Dashboard.TaskForm])(title: String)
 <html>
 	<head>
-		<title>Add Task</title>
+		<title>@title</title>
 		<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
 		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-datetimepicker.min.css")">
 		<link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap-glyphicons.css"))'>
@@ -9,7 +9,7 @@
 		<script src="@routes.Assets.at("javascripts/jquery.min.js")" type="text/javascript"></script>
 		<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("moment.js"))'></script>
 		<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
-		<script src="@routes.Assets.at("javascripts/bootstrap-datetimepicker.min.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/bootstrap-datetimepicker.js")" type="text/javascript"></script>
 		<script src="@routes.Assets.at("javascripts/taskView.js")" type="text/javascript"></script>
 	</head>
 	<body>
@@ -17,8 +17,8 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-3 col-xs-offset-1">
-					<h1>Add Task:</h1>
-					@helper.form(routes.Dashboard.updateTask, 'role -> "form"){
+					<h1>@title:</h1>
+					@helper.form(routes.Dashboard.updateTask, 'role -> "form", 'id -> "theForm"){
 					   <div class="form-group">
 					       <input class="form-control" type="text" name="title" placeholder="Title" value="@task.title">
 					   </div>
@@ -27,24 +27,26 @@
 					   </div>
 					   <div class="form-group">
 					   	<div class="input-group date">
-					       <input class="form-control" type="text" name="start" placeholder="Start Time" value="@task.start">
+					       <input id="fakestart" class="form-control" type="text" placeholder="Start Time" value="@task.start">
 					       <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	    				</div>
 					   </div>
 					   <div class="form-group">
 					   	<div class="input-group date">
-					       <input class="form-control" type="text" name="end" placeholder="End Time" value="@task.end">
+					       <input id="fakeend" class="form-control" type="text" placeholder="End Time" value="@task.end">
 					       <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	    				</div>
 					   </div>
 					   <div class="form-group">
+					   	   <input id="start" class="form-control" type="hidden" name="start" value="@task.start">
+					   	   <input id="end" class="form-control" type="hidden" name="end" value="@task.end">
 					       <input class="form-control" type="hidden" name="category" value="@task.category">
 					       <input class="form-control" type="hidden" name="source" value="@task.source">
 					       <input class="form-control" type="hidden" name="effort" value="@task.effort">
 					       <input class="form-control" type="hidden" name="priority" value="@task.priority">
 					       <input class="form-control" type="hidden" name="ownerId" value="@user.id">
  					   </div>
-					       <button class="btn btn-success" type="submit" name="action" value="save">Save</button>
+					       <button id="save" class="btn btn-success" type="submit" name="action" value="save">Save</button>
 					       <a href="/dashboard" class="btn btn-primary" role="button">Cancel</a>
 					       <button class="btn btn-danger" type="submit" name="action" value="delete">Delete Task</button>
 					}

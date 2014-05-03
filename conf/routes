@@ -14,6 +14,7 @@ GET		/dashboard/addCredentials   controllers.Dashboard.addCredentials()
 POST	/dashboard/saveCredentials  controllers.Dashboard.saveCredentials()
 GET		/dashboard/addTask          controllers.Dashboard.addTask()
 POST	/dashboard/updateTask		controllers.Dashboard.updateTask()
+GET 	/dashboard/editTask			controllers.Dashboard.editTask(tid: Long)
 GET 	/editAccount				controllers.Application.editAccount()
 POST	/editAccount				controllers.Application.updateAccount()
 

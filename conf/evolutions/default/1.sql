@@ -20,12 +20,13 @@ create table task (
   description               varchar(255),
   category                  varchar(255),
   is_complete               integer,
-  end                       timestamp,
-  start                     timestamp,
+  end                       bigint,
+  start                     bigint,
   owner_id                  bigint,
   source                    varchar(255),
   effort                    time,
   priority                  integer,
+  url                       varchar(255),
   constraint pk_task primary key (id))
 ;
 
@@ -37,7 +38,7 @@ create table user (
   password                  varchar(60),
   moodle_login              varchar(255),
   moodle_password           varchar(255),
-  last_update               timestamp,
+  last_update               bigint,
   constraint pk_user primary key (id))
 ;
 
