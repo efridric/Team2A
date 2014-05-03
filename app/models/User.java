@@ -1,5 +1,7 @@
 package models;
 
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 import javax.validation.Constraint;
 
@@ -23,13 +25,13 @@ public class User extends Model {
 	public String password;
 	public String moodleLogin;
 	public String moodlePassword;
+	public Long lastUpdate = Long.parseLong("0");
 	
 	public User(String email, String firstName, String lastName, String password){
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = encryptPassword(password);
-		System.out.println(this.password);
 	}
 	
 	public static Finder<Long, User> find = new Finder<Long,User>(
