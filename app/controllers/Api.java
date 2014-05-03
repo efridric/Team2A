@@ -27,7 +27,7 @@ public class Api extends Controller{
 		
 		List<Task> tasks = Task.listTasks(user.id);
 		
-		String xml = "";
+		String xml = "<tasks>";
 		
 		for(Task task: tasks){
 			String end = "";
@@ -55,6 +55,9 @@ public class Api extends Controller{
 			xml += "</task>";
 		}
 
+		
+		xml += "</tasks>";
+		
 		return ok(xml);
 	}
 }
