@@ -43,12 +43,15 @@
 					       <input class="form-control" type="hidden" name="category" value="@task.category">
 					       <input class="form-control" type="hidden" name="source" value="@task.source">
 					       <input class="form-control" type="hidden" name="effort" value="@task.effort">
+					       <input class="form-control" type="hidden" name="id" value="@task.id">
 					       <input class="form-control" type="hidden" name="priority" value="@task.priority">
 					       <input class="form-control" type="hidden" name="ownerId" value="@user.id">
  					   </div>
 					       <button id="save" class="btn btn-success" type="submit" name="action" value="save">Save</button>
 					       <a href="/dashboard" class="btn btn-primary" role="button">Cancel</a>
-					       <button class="btn btn-danger" type="submit" name="action" value="delete">Delete Task</button>
+					       @if(task.id != null){
+					       	<button class="btn btn-danger" type="submit" name="action" value="delete">Delete Task</button>
+					       	}
 					}
 					@if(addTask.hasGlobalErrors){
 						<div class="alert alert-danger">

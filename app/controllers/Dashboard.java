@@ -122,12 +122,22 @@ public class Dashboard extends Controller {
     
     public static Result updateTask(){
     	User user = User.find.where().eq("email", session("email")).findUnique();
+    	Form<TaskForm> updateTaskForm = Form.form(TaskForm.class).bindFromRequest();
+    	Task task;
+    	Boolean newTask = false;
     	if((request().body().asFormUrlEncoded().get("action"))[0].equals("delete")){
+    	    task = Task.find.where().eq("id", updateTaskForm.get().id).findUnique();
+    	    task.delete();
     		return redirect(routes.Dashboard.home());
     	}
     	else{
-	    	Form<TaskForm> updateTaskForm = Form.form(TaskForm.class).bindFromRequest();
-	    	Task task = new Task();
+	    	if(updateTaskForm.get().id == null){
+	    	    task = new Task();
+	    	    newTask = true;
+	    	}
+	    	else
+	    	    task = Task.find.where().eq("id", updateTaskForm.get().id).findUnique();
+	    	
 	    	task.title = updateTaskForm.get().title;
 	    	task.description = updateTaskForm.get().description;
 	    	task.category = updateTaskForm.get().category;
@@ -148,8 +158,10 @@ public class Dashboard extends Controller {
 								  ));
 			}
 			else{
-				task = Task.create(task, user.id);
-				task.url = "dashboard/editTask?tid="+Long.toString(task.id);
+			    if(newTask){
+			        task = Task.create(task, user.id);
+			        task.url = "dashboard/editTask?tid="+Long.toString(task.id);
+			    }
 				task.save();
 				return redirect(routes.Dashboard.home());			
 			}
