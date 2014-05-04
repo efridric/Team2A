@@ -37,7 +37,7 @@ if(!String.prototype.formatNum) {
 }
 
 jQuery(document).ready(function($) {
-
+	var localOffset = (new Date()).getTimezoneOffset() * 60000;
 	var defaults = {
 		// Width of the calendar
 		width:              '100%',
@@ -395,7 +395,7 @@ jQuery(document).ready(function($) {
 		var data = {};
 		data.cal = this;
 		data.day = 1;
-
+		
 		// Getting list of days in a week in correct order. Works for month and week views
 		if(getExtentedOption(this, 'first_day') == 1) {
 			data.months = [this.locale.d1, this.locale.d2, this.locale.d3, this.locale.d4, this.locale.d5, this.locale.d6, this.locale.d0]
@@ -404,6 +404,7 @@ jQuery(document).ready(function($) {
 		}
 
 		// Get all events between start and end
+		
 		var start = parseInt(this.options.position.start.getTime());
 		var end = parseInt(this.options.position.end.getTime());
 
@@ -871,6 +872,12 @@ jQuery(document).ready(function($) {
 									events = json.result;
 								}
 							});
+						
+						$.each(events, function(k, e) {
+							e.start = e.start - localOffset;
+							e.end = e.end - localOffset;
+						});
+						
 						return events;
 					};
 				}
